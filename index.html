@@ -7,6 +7,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Open Sans', sans-serif;
       background-color: #f4f4f4;
@@ -21,13 +25,14 @@
     }
 
     .logo-top img {
-      max-width: 160px;
-      height: 100%;
+      max-width: 140px;
+      width: 100%;
+      height: auto;
     }
 
     .container {
       max-width: 800px;
-      margin: 120px auto 40px; /* Add top margin to make space for logo */
+      margin: 140px auto 40px;
       background: #fff;
       padding: 40px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -61,7 +66,6 @@
       font-size: 14px;
       border: 1px solid #ccc;
       border-radius: 4px;
-      box-sizing: border-box;
       background-color: #fff;
       transition: border-color 0.3s;
     }
@@ -92,26 +96,73 @@
       background-color: #005f44;
     }
 
-    /* Thank you message style */
     #thankYouMessage {
       text-align: center;
       font-size: 20px;
       color: #008060;
       font-weight: 600;
-      display: none; /* Hidden initially */
+      display: none;
       margin-top: 40px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        margin: 100px 20px 30px;
+        padding: 25px 20px;
+      }
+
+      h2 {
+        font-size: 18px;
+      }
+
+      .logo-top {
+        top: 10px;
+        left: 10px;
+      }
+
+      .logo-top img {
+        max-width: 120px;
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        margin-top: 90px;
+      }
+
+      h2 {
+        font-size: 16px;
+      }
+
+      input,
+      textarea {
+        font-size: 13px;
+      }
+
+      label {
+        font-size: 13px;
+      }
+
+      .submit-btn {
+        font-size: 14px;
+      }
     }
   </style>
 </head>
 <body>
   <!-- Logo fixed at top-left -->
   <div class="logo-top">
-    <!-- Replace with your actual logo -->
     <img src="logo.png" alt="Logo" />
   </div>
 
   <div class="container">
-    <h2>Registration Form<br />Building Sustainable Data Centers in the AI Era</h2>
+    <h2>Building Sustainable Data Centers in the AI Era</h2>
 
     <form id="registrationForm">
       <div class="form-group">
@@ -140,9 +191,7 @@
       </div>
 
       <div class="form-group">
-        <label for="q1"
-          >1. How do you see AI shaping the future of sustainable data centers?</label
-        >
+        <label for="q1">1. How do you see AI shaping the future of sustainable data centers?</label>
         <textarea name="Question1" id="q1" required></textarea>
       </div>
 
@@ -152,9 +201,7 @@
       </div>
 
       <div class="form-group">
-        <label for="q3"
-          >3. Did the activity give you new ideas or insights about Data centers & sustainability?</label
-        >
+        <label for="q3">3. Did the activity give you new ideas or insights about Data centers & sustainability?</label>
         <textarea name="Question3" id="q3" required></textarea>
       </div>
 
@@ -181,7 +228,7 @@
       const form = document.getElementById('registrationForm');
 
       if (!form.reportValidity()) {
-        return; // Stop if form validation fails
+        return;
       }
 
       const formData = new FormData(form);
@@ -191,24 +238,15 @@
         dataObj[key] = value;
       });
 
-      // Retrieve existing data from localStorage or initialize empty array
       let existingData = JSON.parse(localStorage.getItem('formData')) || [];
-
-      // Add new submission
       existingData.push(dataObj);
-
-      // Save updated data back to localStorage
       localStorage.setItem('formData', JSON.stringify(existingData));
 
-      // Convert to Excel sheet
       const worksheet = XLSX.utils.json_to_sheet(existingData);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Responses');
-
-      // Download Excel file
       XLSX.writeFile(workbook, 'Registration_Form_Data.xlsx');
 
-      // Clear form and show thank you message
       form.style.display = 'none';
       document.getElementById('thankYouMessage').style.display = 'block';
     }
